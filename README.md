@@ -6,7 +6,7 @@ Research by **Olavo Miguel Cabaço Caixeiro, Maryam Abbasi and Pedro Miguel de O
 
 [Read the manuscript](publications/article_2.pdf) · [Inspect the evidence](results/) · [Explore the code](src/) · [Obtain the datasets](datasets/)
 
-This dedicated repository accompanies **Article 2**, a manuscript in preparation for submission, not an accepted or published journal article. It separates model ranking, validation-selected operating thresholds and the resulting alert workload. The current author-review PDF predates the dedicated-repository links; a reviewed Overleaf export will replace it without changing the reported experiments.
+This dedicated repository accompanies **Article 2**, a manuscript in preparation for submission, not an accepted or published journal article. It separates model ranking, validation-selected operating thresholds and the resulting alert workload. The reviewed 8 October 2026 PDF includes the dedicated-repository links and identifies the public figure scripts and frozen inputs. These documentary updates do not change the reported experiments.
 
 ## Study and findings
 

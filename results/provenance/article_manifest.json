@@ -3,7 +3,7 @@
   "article": 2,
   "repository": "https://github.com/Applied-Intelligence-Hub/tabular-ml-dl-threshold-benchmark",
   "parent_repository": "https://github.com/Olavo200100274/fraud-imbalance-classical-vs-transformers",
-  "parent_source_commit": "5169523fd5cd4799ffbb8417f792e87ca2159edb",
+  "parent_source_commit": "2846fb11f97f00334d61710a819433f5aa8897a1",
   "original_reporting_qa_sha256": "7bafe378ab0c2842b03ad408c285e9e8f2e9d09779038176ccd3947227b66f42",
   "original_selection_sha256": "dbdf3c9d97ce51c219b26573e62ff8739fd460ed69c4faec5bacd45ca532e216",
   "primary_runs": {
@@ -2572,7 +2572,7 @@
     "ulb_2013/rf": "results/thresholds/ulb_2013/rf.json"
   },
   "transfer_runs": {},
-  "manuscript_status": "Unpublished manuscript in preparation for submission; PDF precedes final repository-link additions",
+  "manuscript_status": "Unpublished manuscript in preparation for submission; reviewed PDF includes dedicated repository links",
   "omitted": [
     "raw datasets",
     "trained model weights",
@@ -2582,12 +2582,12 @@
   ],
   "files": {
     "publications/article_2.pdf": {
-      "sha256": "d95f31357e2a19037526416577afa7c42453a8a01c60f10676a8f09b036bcab5",
-      "bytes": 502841,
+      "sha256": "782952fcf85c3537fbd47d9b04c9a01ab7ec2d6a5cef5546b79071796bce09e0",
+      "bytes": 504278,
       "sources": [
         {
           "archive_path": "publications/article_2.pdf",
-          "sha256": "d95f31357e2a19037526416577afa7c42453a8a01c60f10676a8f09b036bcab5"
+          "sha256": "782952fcf85c3537fbd47d9b04c9a01ab7ec2d6a5cef5546b79071796bce09e0"
         }
       ]
     },
@@ -6344,8 +6344,8 @@
       "bytes": 20976
     },
     "src/article_release.py": {
-      "sha256": "ff141831f89c067b856909f2bda69821f035c73060759acd1947408dd7ac47d8",
-      "bytes": 23295
+      "sha256": "9b4467e956aa96887860400867d323ee66e16d69f0ec314bcfc26379c9d8280a",
+      "bytes": 23299
     },
     "src/attention_analysis.py": {
       "sha256": "09dd2c0e51195bfb6bff1727395b4940746c5feafc29fffb679f327487eb94e0",
@@ -6376,7 +6376,7 @@
       "bytes": 13771
     },
     "src/export_public_evidence.py": {
-      "sha256": "cf64aa22addbd899ad94d2dd8ac05f65efcdee4a2c7b77b715b3bbb43c082faf",
+      "sha256": "e0d170cdb2b68e89fb2dcef3d90a040f0afa5089e4be29c257e14cac2f075a9c",
       "bytes": 25895
     },
     "src/ft_run_protocol.py": {

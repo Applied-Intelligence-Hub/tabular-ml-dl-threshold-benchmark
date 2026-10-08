@@ -49,6 +49,6 @@ Historical CatBoost SMOTE records lack an explicit TEST-index artefact. Where pa
 
 Average precision is computed from complete score evidence, not trapezoidal areas or compact plotting coordinates. Thresholds remain DEV-selected; recomputation must not optimize on TEST. The max-F2 threshold studies reproduce their pinned baseline confusion counts. Infeasible precision targets retain the recorded no-alert outcome.
 
-The PDF hash in the inventory identifies the included author-review export. Repository-link revisions do not change the underlying experiments; a new PDF must be reviewed and repinned before it replaces the current export.
+The PDF hash in the inventory identifies the reviewed 8 October 2026 export, including the dedicated-repository links and the public figure scripts and frozen inputs named in the reproduction section. These documentary updates do not change the underlying experiments. Any subsequent PDF must be reviewed and repinned before it replaces this export.
 
 Do not train into or manually modify `results/`. A different release needs a new reviewed inventory. Integrity checks establish consistency of the selected evidence, not an independent audit of dataset authenticity, a fresh training replication or a production guarantee.
