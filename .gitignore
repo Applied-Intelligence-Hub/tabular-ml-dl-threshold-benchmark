@@ -218,3 +218,17 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# New runs and author-only inputs are not the frozen publication evidence.
+/runs/
+/tmp/
+/reports/
+/catboost_info/
+/datasets/*.csv
+/datasets/*.parquet
+/datasets/*.zip
+/results_revision/
+/Article 1/
+/Article 2/
+/Overleaf/
+/deliverables/

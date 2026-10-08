@@ -1,0 +1,85 @@
+{
+  "comparison": "SMOTENC control minus primary OHE-space SMOTE; fixed historical HP, same Base TEST",
+  "source_run": "results/baf_base/catboost/smote/run_20260314_221446",
+  "source_config_sha256": "156d8d496f9199895e3822a38d2e0d5acf9bce52badb9c0df76de4fc28cb7308",
+  "raw_file_sha256": "7bf10a37ce07e72e14c1b09e5efee3d27261baff4facc7da767b0474dcf9b809",
+  "shared_test_row_indices_sha256": "7bb474a92e980fed8af2a51014d698ad892f4766df61f5d602810822a68376a5",
+  "test_labels_exactly_equal": true,
+  "historical_test_indices_explicitly_saved": false,
+  "alignment_basis": "Same raw CSV, deterministic seed-42 stratified split, and exact saved ordered TEST labels; explicit indices additionally checked when available.",
+  "source_artefacts_sha256": {
+    "config.json": "156d8d496f9199895e3822a38d2e0d5acf9bce52badb9c0df76de4fc28cb7308",
+    "metrics_test.json": "3223b2191ed7be61ddd491b12fdfa074cfc490a00672adb8d66a2bbf6dae32e7",
+    "y_test.npy": "d4da3d6a6c62ef54d683eb8837c0d88c54a26ff4fe32d7f8b74ae491201e83fd",
+    "y_test_scores.npy": "fe8a43cd8047a59d063f854ac48d193dfee5a65a76427883880104beae7195ac"
+  },
+  "primary_threshold": 0.090195,
+  "primary_threshold_precision": "historical saved six-decimal threshold; confusion counts reproduced",
+  "control_threshold_full_precision": 0.10260378469312864,
+  "primary_metrics": {
+    "PR-AUC": 0.154322,
+    "ROC-AUC": 0.886665,
+    "F1": 0.202391,
+    "F2": 0.302911,
+    "TP": 999,
+    "FP": 6667,
+    "TN": 191127,
+    "FN": 1207,
+    "alert_rate": 0.03833,
+    "FP/TP": 6.6737,
+    "threshold": 0.090195,
+    "brier_score": 0.010259,
+    "precision_at_k": 0.305,
+    "recall_at_k": 0.138259,
+    "k_used": 1000
+  },
+  "control_metrics": {
+    "PR-AUC": 0.143332,
+    "ROC-AUC": 0.876126,
+    "F1": 0.185286,
+    "F2": 0.285615,
+    "TP": 986,
+    "FP": 7451,
+    "TN": 190343,
+    "FN": 1220,
+    "alert_rate": 0.042185,
+    "FP/TP": 7.5568,
+    "threshold": 0.102604,
+    "brier_score": 0.010735,
+    "precision_at_k": 0.293,
+    "recall_at_k": 0.13282,
+    "k_used": 1000
+  },
+  "difference_full_precision": {
+    "PR-AUC": -0.010989189492949275,
+    "ROC-AUC": -0.010539106727989411,
+    "F2": -0.017295884899721503
+  },
+  "bootstrap_iterations": 1000,
+  "bootstrap_seed": 42,
+  "test_used_for_policy_or_hyperparameter_selection": false,
+  "scientific_scope": "Representation and nominal-aware resampling intervention; not a native-categorical architecture effect.",
+  "paired_difference_bootstrap": {
+    "PR-AUC": {
+      "ci_95_percent": [
+        -0.014693021005481326,
+        -0.007401017741800154
+      ],
+      "valid_replicates": 1000
+    },
+    "ROC-AUC": {
+      "ci_95_percent": [
+        -0.012358177570969454,
+        -0.008647330356450175
+      ],
+      "valid_replicates": 1000
+    },
+    "F2": {
+      "ci_95_percent": [
+        -0.02332753945379567,
+        -0.010753212848556987
+      ],
+      "valid_replicates": 1000
+    }
+  }
+}

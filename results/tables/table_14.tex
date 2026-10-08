@@ -1,0 +1,13 @@
+\begin{tabularx}{\linewidth}{@{}X l l l@{}}
+\toprule
+Evidence scope and objective & Model & Strategy & Threshold \\
+\midrule
+ULB: highest factorial $F_2$ & RF & Weights & max-$F_2$ \\
+ULB: highest baseline-rule $F_1$ & LGBM & None & max-$F_2$ \\
+BAF: highest factorial $F_2$ & LGBM & Weights & max-$F_2$ \\
+BAF: highest baseline-rule $F_1$ & CatBoost & None & max-$F_1$ \\
+BAF: precision-target recall candidate & FT-Trans. & None & Prec.\ target \\
+BAF: short historical final-fit candidate & LGBM & None & max-$F_2$ \\
+BAF: highest transformer PR-AUC & FT-Trans. & None & max-$F_2$ \\
+\bottomrule
+\end{tabularx}

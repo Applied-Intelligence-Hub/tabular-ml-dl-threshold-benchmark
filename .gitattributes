@@ -1,0 +1,18 @@
+*.joblib filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.npy filter=lfs diff=lfs merge=lfs -text
+datasets/*.csv filter=lfs diff=lfs merge=lfs -text
+
+# The publication inventory hashes exact bytes (including historical CRLF tables).
+# Disable checkout line-ending conversion only for the frozen evidence export.
+/results/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/publications/*.pdf -text
+
+# Preserve pinned bytes, including historical Windows line endings.
+/src/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/tests/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/datasets/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/notebooks/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/requirements.txt -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/LICENSE -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/.gitattributes -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
