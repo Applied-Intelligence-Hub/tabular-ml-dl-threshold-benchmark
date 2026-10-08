@@ -1,4 +1,4 @@
-# tabular-ml-dl-threshold-benchmark
+# artigo 2
 
 Code and evidence for *Threshold Selection as a Critical Design Choice in Financial Fraud Detection: A Systematic Comparison of Classical Machine Learning Models and Tabular Transformers*.
 
