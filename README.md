@@ -2,12 +2,6 @@
 
 *A Systematic Comparison of Classical Machine Learning Models and Tabular Transformers*
 
-Research by **Olavo Miguel Cabaço Caixeiro, Maryam Abbasi and Pedro Miguel de Oliveira Martins**, Universidade Politécnica de Santarém.
-
-[Read the manuscript](publications/article_2.pdf) · [Inspect the evidence](results/) · [Explore the code](src/) · [Obtain the datasets](datasets/)
-
-This dedicated repository accompanies **Article 2**, a manuscript in preparation for submission, not an accepted or published journal article. It separates model ranking, validation-selected operating thresholds and the resulting alert workload. The reviewed 8 October 2026 PDF includes the dedicated-repository links and identifies the public figure scripts and frozen inputs. These documentary updates do not change the reported experiments.
-
 ## Study and findings
 
 Five supervised families (Logistic Regression, Random Forest, LightGBM, CatBoost and FT-Transformer) and a One-Class SVM reference are evaluated on ULB credit-card transactions and BAF Base bank-account applications. OCSVM fits legitimate examples only, but labelled validation examples select its threshold; it is not an entirely label-free workflow.
@@ -116,13 +110,6 @@ Synthetic tests do not retrain the full study:
 python -m unittest discover -s tests -p "test_*.py"
 ```
 
-## Related work and citation
-
-This paper shares corrected baseline and imbalance evidence with [Article 1](https://github.com/Applied-Intelligence-Hub/transformers-vs-ml-fraud-detection), which focuses on sensitivity, controlled transfer and interpretation boundaries. The [main thesis repository](https://github.com/Olavo200100274/fraud-imbalance-classical-vs-transformers) covers the broader dissertation and preserves its development history. These are related analyses, not independent replications.
-
-> Caixeiro, O. M. C., Abbasi, M., and Martins, P. M. O. (2026). *Threshold Selection as a Critical Design Choice in Financial Fraud Detection: A Systematic Comparison of Classical Machine Learning Models and Tabular Transformers*. Manuscript in preparation for submission.
-
-Include this repository URL and the commit used when citing code or evidence. Cite dataset authors and third-party methods separately. Do not invent journal acceptance, publication metadata or a DOI.
 
 ## AI assistance and rights
 
