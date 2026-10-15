@@ -33,7 +33,8 @@
       "recall_at_k": 0.15503173164097914,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.05732954471161277
+      "threshold": 0.05732954471161277,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/catboost/ros": {
       "F1": 0.21343050494534097,
@@ -68,7 +69,8 @@
       "recall_at_k": 0.16047144152311876,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.836854
+      "threshold": 0.836854,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/catboost/rus": {
       "F1": 0.2124362895005097,
@@ -103,7 +105,8 @@
       "recall_at_k": 0.15049864007252947,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.84972
+      "threshold": 0.84972,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/catboost/smote": {
       "F1": 0.20239059967585088,
@@ -138,7 +141,8 @@
       "recall_at_k": 0.13825929283771532,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.090195
+      "threshold": 0.090195,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/catboost/smote_tomek": {
       "F1": 0.20239059967585088,
@@ -173,7 +177,8 @@
       "recall_at_k": 0.13825929283771532,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.090195
+      "threshold": 0.090195,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/catboost/smoteenn": {
       "F1": 0.20488385944014295,
@@ -208,7 +213,8 @@
       "recall_at_k": 0.14324569356300998,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.148684
+      "threshold": 0.148684,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/catboost/weights": {
       "F1": 0.20810259399591954,
@@ -243,7 +249,8 @@
       "recall_at_k": 0.15503173164097914,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.826635
+      "threshold": 0.826635,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/fttransformer/none": {
       "F1": 0.18076358296622613,
@@ -278,7 +285,8 @@
       "recall_at_k": 0.14913871260199457,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.05843411013484001
+      "threshold": 0.05843411013484001,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/fttransformer/ros": {
       "F1": 0.2108937070333157,
@@ -299,7 +307,8 @@
       "recall_at_k": 0.1414324569356301,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.854138195514679
+      "threshold": 0.854138195514679,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/fttransformer/rus": {
       "F1": 0.2107881940517924,
@@ -320,7 +329,8 @@
       "recall_at_k": 0.13825929283771532,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.9217880964279175
+      "threshold": 0.9217880964279175,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/fttransformer/smote": {
       "F1": 0.14982312547686757,
@@ -341,7 +351,8 @@
       "recall_at_k": 0.10199456029011786,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.5792941451072693
+      "threshold": 0.5792941451072693,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/fttransformer/smote_tomek": {
       "F1": 0.14982312547686757,
@@ -362,7 +373,8 @@
       "recall_at_k": 0.10199456029011786,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.5792941451072693
+      "threshold": 0.5792941451072693,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/fttransformer/smoteenn": {
       "F1": 0.16709877059463077,
@@ -383,7 +395,8 @@
       "recall_at_k": 0.11831368993653672,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.7572863698005676
+      "threshold": 0.7572863698005676,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/fttransformer/weights": {
       "F1": 0.19878766268497058,
@@ -404,7 +417,8 @@
       "recall_at_k": 0.15231187669990934,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.8412745594978333
+      "threshold": 0.8412745594978333,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/lgbm/none": {
       "F1": 0.22242647058823528,
@@ -439,7 +453,8 @@
       "recall_at_k": 0.15503173164097914,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.06362069759967758
+      "threshold": 0.06362069759967758,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/lgbm/ros": {
       "F1": 0.22468281430219147,
@@ -474,7 +489,8 @@
       "recall_at_k": 0.15457842248413417,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.850052
+      "threshold": 0.850052,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/lgbm/rus": {
       "F1": 0.21062034739454094,
@@ -509,7 +525,8 @@
       "recall_at_k": 0.14732547597461468,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.851913
+      "threshold": 0.851913,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/lgbm/smote": {
       "F1": 0.18900120560140962,
@@ -544,7 +561,8 @@
       "recall_at_k": 0.12964641885766093,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.088321
+      "threshold": 0.088321,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/lgbm/smote_tomek": {
       "F1": 0.18900120560140962,
@@ -579,7 +597,8 @@
       "recall_at_k": 0.12964641885766093,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.088321
+      "threshold": 0.088321,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/lgbm/smoteenn": {
       "F1": 0.19400056069526211,
@@ -614,7 +633,8 @@
       "recall_at_k": 0.13553943789664552,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.150555
+      "threshold": 0.150555,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/lgbm/weights": {
       "F1": 0.21809645753307724,
@@ -649,7 +669,8 @@
       "recall_at_k": 0.1514052583862194,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.839609
+      "threshold": 0.839609,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/logreg/none": {
       "F1": 0.1871244635193133,
@@ -684,7 +705,8 @@
       "recall_at_k": 0.12330009066183137,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.05271516125129787
+      "threshold": 0.05271516125129787,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/logreg/ros": {
       "F1": 0.18862245409852513,
@@ -719,7 +741,8 @@
       "recall_at_k": 0.11876699909338169,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.847697
+      "threshold": 0.847697,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/logreg/rus": {
       "F1": 0.1860329776915616,
@@ -754,7 +777,8 @@
       "recall_at_k": 0.11876699909338169,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.835949
+      "threshold": 0.835949,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/logreg/smote": {
       "F1": 0.1793329688354292,
@@ -789,7 +813,8 @@
       "recall_at_k": 0.12012692656391659,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.844761
+      "threshold": 0.844761,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/logreg/smote_tomek": {
       "F1": 0.1793329688354292,
@@ -824,7 +849,8 @@
       "recall_at_k": 0.12012692656391659,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.844761
+      "threshold": 0.844761,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/logreg/smoteenn": {
       "F1": 0.17697594501718214,
@@ -859,7 +885,8 @@
       "recall_at_k": 0.1214868540344515,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.893686
+      "threshold": 0.893686,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/logreg/weights": {
       "F1": 0.1890849596821316,
@@ -894,7 +921,8 @@
       "recall_at_k": 0.10970081595648232,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.862054
+      "threshold": 0.862054,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/ocsvm/none": {
       "F1": 0.044874458360538966,
@@ -929,7 +957,8 @@
       "recall_at_k": 0.013599274705349048,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": -40.25970411861351
+      "threshold": -40.25970411861351,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/rf/none": {
       "F1": 0.20478961504028648,
@@ -964,7 +993,8 @@
       "recall_at_k": 0.1414324569356301,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.06311373249196667
+      "threshold": 0.06311373249196667,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/rf/ros": {
       "F1": 0.2009150586831112,
@@ -999,7 +1029,8 @@
       "recall_at_k": 0.12783318223028106,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.206966
+      "threshold": 0.206966,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/rf/rus": {
       "F1": 0.1834271922767498,
@@ -1034,7 +1065,8 @@
       "recall_at_k": 0.12012692656391659,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.753884
+      "threshold": 0.753884,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/rf/smote": {
       "F1": 0.17899675207506316,
@@ -1069,7 +1101,8 @@
       "recall_at_k": 0.10380779691749774,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.1779
+      "threshold": 0.1779,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/rf/smote_tomek": {
       "F1": 0.17899675207506316,
@@ -1104,7 +1137,8 @@
       "recall_at_k": 0.10380779691749774,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.1779
+      "threshold": 0.1779,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/rf/smoteenn": {
       "F1": 0.18243948742287613,
@@ -1139,7 +1173,8 @@
       "recall_at_k": 0.10244786944696282,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.274196
+      "threshold": 0.274196,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "baf_base/rf/weights": {
       "F1": 0.19607068812321057,
@@ -1174,7 +1209,8 @@
       "recall_at_k": 0.1273798730734361,
       "test_fraud_samples": 2206,
       "test_samples": 200000,
-      "threshold": 0.210354
+      "threshold": 0.210354,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/catboost/none": {
       "F1": 0.8208092485549133,
@@ -1209,7 +1245,8 @@
       "recall_at_k": 0.8526315789473684,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.12792753573884205
+      "threshold": 0.12792753573884205,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/catboost/ros": {
       "F1": 0.8379888268156425,
@@ -1230,7 +1267,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.7047951387241632
+      "threshold": 0.7047951387241632,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/catboost/rus": {
       "F1": 0.7700534759358288,
@@ -1251,7 +1289,8 @@
       "recall_at_k": 0.8315789473684211,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9849349451592359
+      "threshold": 0.9849349451592359,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/catboost/smote": {
       "F1": 0.8202247191011236,
@@ -1272,7 +1311,8 @@
       "recall_at_k": 0.8315789473684211,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.94195441007336
+      "threshold": 0.94195441007336,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/catboost/smote_tomek": {
       "F1": 0.8202247191011236,
@@ -1293,7 +1333,8 @@
       "recall_at_k": 0.8315789473684211,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.94195441007336
+      "threshold": 0.94195441007336,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/catboost/smoteenn": {
       "F1": 0.8135593220338984,
@@ -1314,7 +1355,8 @@
       "recall_at_k": 0.8105263157894737,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9609504668604607
+      "threshold": 0.9609504668604607,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/catboost/weights": {
       "F1": 0.8044692737430168,
@@ -1335,7 +1377,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.8408205667942548
+      "threshold": 0.8408205667942548,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/fttransformer/none": {
       "F1": 0.8,
@@ -1370,7 +1413,8 @@
       "recall_at_k": 0.8315789473684211,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.27368253469467163
+      "threshold": 0.27368253469467163,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/fttransformer/ros": {
       "F1": 0.8263473053892215,
@@ -1391,7 +1435,8 @@
       "recall_at_k": 0.8,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9998815059661865
+      "threshold": 0.9998815059661865,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/fttransformer/rus": {
       "F1": 0.4520123839009288,
@@ -1412,7 +1457,8 @@
       "recall_at_k": 0.7789473684210526,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9991713762283325
+      "threshold": 0.9991713762283325,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/fttransformer/smote": {
       "F1": 0.7607361963190185,
@@ -1433,7 +1479,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9999741315841675
+      "threshold": 0.9999741315841675,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/fttransformer/smote_tomek": {
       "F1": 0.7607361963190185,
@@ -1454,7 +1501,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9999741315841675
+      "threshold": 0.9999741315841675,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/fttransformer/smoteenn": {
       "F1": 0.779874213836478,
@@ -1475,7 +1523,8 @@
       "recall_at_k": 0.8421052631578947,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9999957084655762
+      "threshold": 0.9999957084655762,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/fttransformer/weights": {
       "F1": 0.8,
@@ -1496,7 +1545,8 @@
       "recall_at_k": 0.7894736842105263,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.972650408744812
+      "threshold": 0.972650408744812,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/lgbm/none": {
       "F1": 0.8522727272727273,
@@ -1531,7 +1581,8 @@
       "recall_at_k": 0.8631578947368421,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.1580633892813065
+      "threshold": 0.1580633892813065,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/lgbm/ros": {
       "F1": 0.8156424581005587,
@@ -1552,7 +1603,8 @@
       "recall_at_k": 0.8421052631578947,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.6163950267614895
+      "threshold": 0.6163950267614895,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/lgbm/rus": {
       "F1": 0.7759562841530054,
@@ -1573,7 +1625,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9650640903349734
+      "threshold": 0.9650640903349734,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/lgbm/smote": {
       "F1": 0.813953488372093,
@@ -1594,7 +1647,8 @@
       "recall_at_k": 0.8526315789473684,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9425840004158479
+      "threshold": 0.9425840004158479,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/lgbm/smote_tomek": {
       "F1": 0.813953488372093,
@@ -1615,7 +1669,8 @@
       "recall_at_k": 0.8526315789473684,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9425840004158479
+      "threshold": 0.9425840004158479,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/lgbm/smoteenn": {
       "F1": 0.8043478260869565,
@@ -1636,7 +1691,8 @@
       "recall_at_k": 0.8526315789473684,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.936955783436663
+      "threshold": 0.936955783436663,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/lgbm/weights": {
       "F1": 0.797752808988764,
@@ -1657,7 +1713,8 @@
       "recall_at_k": 0.8315789473684211,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9425670150730929
+      "threshold": 0.9425670150730929,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/logreg/none": {
       "F1": 0.7912087912087912,
@@ -1692,7 +1749,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.05503314789249719
+      "threshold": 0.05503314789249719,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/logreg/ros": {
       "F1": 0.7934782608695652,
@@ -1713,7 +1771,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9999706593180568
+      "threshold": 0.9999706593180568,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/logreg/rus": {
       "F1": 0.6607929515418502,
@@ -1734,7 +1793,8 @@
       "recall_at_k": 0.8,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9180689421546673
+      "threshold": 0.9180689421546673,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/logreg/smote": {
       "F1": 0.776595744680851,
@@ -1755,7 +1815,8 @@
       "recall_at_k": 0.8,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9999559965811894
+      "threshold": 0.9999559965811894,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/logreg/smote_tomek": {
       "F1": 0.776595744680851,
@@ -1776,7 +1837,8 @@
       "recall_at_k": 0.8,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9999559965811894
+      "threshold": 0.9999559965811894,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/logreg/smoteenn": {
       "F1": 0.7934782608695652,
@@ -1797,7 +1859,8 @@
       "recall_at_k": 0.8105263157894737,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.9999895485532516
+      "threshold": 0.9999895485532516,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/logreg/weights": {
       "F1": 0.7978142076502732,
@@ -1818,7 +1881,8 @@
       "recall_at_k": 0.8210526315789474,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.999967771624139
+      "threshold": 0.999967771624139,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/ocsvm/none": {
       "F1": 0.3592814371257485,
@@ -1853,7 +1917,8 @@
       "recall_at_k": 0.6526315789473685,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 2.2391409444629913
+      "threshold": 2.2391409444629913,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/rf/none": {
       "F1": 0.8202247191011236,
@@ -1888,7 +1953,8 @@
       "recall_at_k": 0.8105263157894737,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.26
+      "threshold": 0.26,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/rf/ros": {
       "F1": 0.847457627118644,
@@ -1904,12 +1970,13 @@
       "brier_score": 0.0004559097616215798,
       "k_used": 283,
       "precision": 0.9146341463414634,
-      "precision_at_k": 0.2756183745583039,
+      "precision_at_k": 0.2770245907550299,
       "recall": 0.7894736842105263,
-      "recall_at_k": 0.8210526315789474,
+      "recall_at_k": 0.8252416756176154,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.22
+      "threshold": 0.22,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/rf/rus": {
       "F1": 0.8,
@@ -1930,7 +1997,8 @@
       "recall_at_k": 0.8315789473684211,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.89
+      "threshold": 0.89,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/rf/smote": {
       "F1": 0.8128342245989305,
@@ -1951,7 +2019,8 @@
       "recall_at_k": 0.8421052631578947,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.3466666666666667
+      "threshold": 0.3466666666666667,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/rf/smote_tomek": {
       "F1": 0.8128342245989305,
@@ -1972,7 +2041,8 @@
       "recall_at_k": 0.8421052631578947,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.3466666666666667
+      "threshold": 0.3466666666666667,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/rf/smoteenn": {
       "F1": 0.7976878612716763,
@@ -1993,7 +2063,8 @@
       "recall_at_k": 0.8526315789473684,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.6033333333333334
+      "threshold": 0.6033333333333334,
+      "top_k_policy": "expected_uniform_boundary_v1"
     },
     "ulb_2013/rf/weights": {
       "F1": 0.8539325842696629,
@@ -2009,17 +2080,19 @@
       "brier_score": 0.00047493860662214395,
       "k_used": 283,
       "precision": 0.9156626506024096,
-      "precision_at_k": 0.2791519434628975,
+      "precision_at_k": 0.2774681623070173,
       "recall": 0.8,
-      "recall_at_k": 0.8315789473684211,
+      "recall_at_k": 0.8265630519251148,
       "test_fraud_samples": 95,
       "test_samples": 56746,
-      "threshold": 0.16
+      "threshold": 0.16,
+      "top_k_policy": "expected_uniform_boundary_v1"
     }
   },
   "precision_basis": {
     "operating": "Integer saved confusion counts; exact current thresholds verified",
     "ranking": "Complete saved TEST score arrays",
-    "strategy_population_sd": "Full-precision AP and count-derived F2, ddof=0; not random-seed variability"
+    "strategy_population_sd": "Six effective conditions (exclude audited SMOTE+Tomek), ddof=0, full precision; seven executed labels retained",
+    "top_k_policy": "expected_uniform_boundary_v1"
   }
 }

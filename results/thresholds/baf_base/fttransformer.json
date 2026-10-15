@@ -2,8 +2,9 @@
   "aggregation": "single validation holdout",
   "dataset": "baf_base",
   "fixed_rule_scale": "fraud probability",
+  "historical_precision_constraint_scope": "each validation fold; neither a pooled validation nor TEST guarantee after median aggregation",
   "model": "fttransformer",
-  "precision_constraint_scope": "each validation fold; neither a pooled validation nor TEST guarantee after median aggregation",
+  "precision_constraint_scope": "single DEV validation holdout; threshold transported from the validation checkpoint to the full-DEV final network; no TEST precision guarantee",
   "selection_population": "DEV validation only; TEST scores used after threshold selection",
   "source_run": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309",
   "source_sha256": {

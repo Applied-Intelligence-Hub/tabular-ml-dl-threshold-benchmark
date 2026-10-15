@@ -22,6 +22,15 @@ from threshold_study import STRATEGIES, apply_threshold, compute_fold_thresholds
 MODELS = ("logreg", "rf", "lgbm", "catboost", "fttransformer", "ocsvm")
 
 
+def precision_constraint_scope(model: str) -> str:
+    """Describe actual selection, not a guarantee about later populations."""
+    if model == "fttransformer":
+        return ("single DEV validation holdout; threshold transported from the validation "
+                "checkpoint to the full-DEV final network; no TEST precision guarantee")
+    return ("each validation fold; neither a pooled validation nor TEST guarantee "
+            "after median aggregation")
+
+
 def derive_thresholds(labels: np.ndarray, scores: np.ndarray, fold_ids: np.ndarray,
                       model: str) -> dict:
     """Apply the declared fold aggregation to saved validation predictions."""
@@ -127,7 +136,7 @@ def study_saved_run(run_dir: Path, dataset: str, model: str) -> dict:
             raise ValueError(f"The saved baseline TEST {key} does not reproduce under the exact max-F2 threshold")
     return {"model": model, "dataset": dataset, "source_run": str(run_dir.resolve()),
             "selection_population": "DEV validation only; TEST scores used after threshold selection",
-            "precision_constraint_scope": "each validation fold; neither a pooled validation nor TEST guarantee after median aggregation",
+            "precision_constraint_scope": precision_constraint_scope(model),
             "fixed_rule_scale": "anomaly-score reference, not a probability" if model == "ocsvm" else "fraud probability",
             "test_samples": len(y_test), "test_fraud_samples": int(y_test.sum()),
             "test_prevalence": float(y_test.mean()), **thresholds, "test_results": results,

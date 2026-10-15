@@ -1,0 +1,180 @@
+{
+  "all_15_adjusted_Brier_values_lower": true,
+  "all_available_historical_classical_cuts_replay": true,
+  "all_original_input_hashes_unchanged": true,
+  "analytic_transformations": 15,
+  "canonical_output_inventory": [
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/basic_verified/diagnostics.json",
+      "sha256": "6c3346b43f8551fb01297b1066d719135f9b367354bfc8d78212834d6310f066"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/basic_verified/lgbm_ulb_cut_sensitivity.csv",
+      "sha256": "0ec6ec49d5fa4c9e5139583a5d993874c65e5adf96ab2b3a6cc261a612609a7b"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/basic_verified/precision.csv",
+      "sha256": "fdb4caa72a7f48163af9136e5a4062405c71a0c564c140be0c9642d4cbfc5d6e"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/paired_ap/diagnostics.json",
+      "sha256": "4c1798495a54a1f83f1bd31fa24156525e47838aa3fb6c217c09ae67627d4682"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/ft_transport/A_test_scores.npy",
+      "sha256": "0875d5b0420f57dd9bd5dea13d8a7e4d380c7b0bf3c06b1ad89288fbbd908a64"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/ft_transport/diagnostics.json",
+      "sha256": "918377c823b9b55cfebeaf26e24fe83b05ab64a209393f6fb323298a9637b0c0"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/ft_transport/sensitivity.csv",
+      "sha256": "f4741284926867ce215c20c2a79e05cd61a683c87be7ad66f080ad7088e9ae3b"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/tables/manifest.json",
+      "sha256": "fd4e27c296e6e97c6147c1f59c8c0a1dbaa7d164f87654dc612891695936908a"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_precision_ulb.tex",
+      "sha256": "22b91945496837a2a2579a288b7e90116f875c03b8dded2f619bcdbac4689783"
+    },
+    {
+      "path": "Article 2/tables/supervisor_precision_ulb.tex",
+      "sha256": "22b91945496837a2a2579a288b7e90116f875c03b8dded2f619bcdbac4689783"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_precision_baf.tex",
+      "sha256": "c4c719deb2009e9c3f1a96ff4c3d76edb921b0a6db36b585dcac7c432306be9c"
+    },
+    {
+      "path": "Article 2/tables/supervisor_precision_baf.tex",
+      "sha256": "c4c719deb2009e9c3f1a96ff4c3d76edb921b0a6db36b585dcac7c432306be9c"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_threshold_folds.tex",
+      "sha256": "36f7f9756c095edc441c591e6997bec8df38b0aabbeb09875a4560bec9ffade5"
+    },
+    {
+      "path": "Article 1/tables/supervisor_threshold_folds.tex",
+      "sha256": "36f7f9756c095edc441c591e6997bec8df38b0aabbeb09875a4560bec9ffade5"
+    },
+    {
+      "path": "Article 2/tables/supervisor_threshold_folds.tex",
+      "sha256": "36f7f9756c095edc441c591e6997bec8df38b0aabbeb09875a4560bec9ffade5"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_threshold_folds_full.tex",
+      "sha256": "827c7169cfe7400787ade213da3398ba6bd7311a7041ebb44bffe34c222fa15d"
+    },
+    {
+      "path": "Article 1/tables/supervisor_threshold_folds_full.tex",
+      "sha256": "827c7169cfe7400787ade213da3398ba6bd7311a7041ebb44bffe34c222fa15d"
+    },
+    {
+      "path": "Article 2/tables/supervisor_threshold_folds_full.tex",
+      "sha256": "827c7169cfe7400787ade213da3398ba6bd7311a7041ebb44bffe34c222fa15d"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_lgbm_cut_sensitivity.tex",
+      "sha256": "27b7f55c5063a5ed7521e37b49610bf6578b189d9425c6b8e3b0e634d3fdd31e"
+    },
+    {
+      "path": "Article 2/tables/supervisor_lgbm_cut_sensitivity.tex",
+      "sha256": "27b7f55c5063a5ed7521e37b49610bf6578b189d9425c6b8e3b0e634d3fdd31e"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_prior_brier.tex",
+      "sha256": "a175d733a5f9181932dc59adb672a06cb2fe6a49954845b7b21c84b4898acabf"
+    },
+    {
+      "path": "Article 1/tables/supervisor_prior_brier.tex",
+      "sha256": "a175d733a5f9181932dc59adb672a06cb2fe6a49954845b7b21c84b4898acabf"
+    },
+    {
+      "path": "Article 2/tables/supervisor_prior_brier.tex",
+      "sha256": "a175d733a5f9181932dc59adb672a06cb2fe6a49954845b7b21c84b4898acabf"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_ft_transport.tex",
+      "sha256": "b3cea8202b6618327e0e6f48b5820e29334577c8b127ae0466f9d81fd0e2fbe8"
+    },
+    {
+      "path": "Article 1/tables/supervisor_ft_transport.tex",
+      "sha256": "b3cea8202b6618327e0e6f48b5820e29334577c8b127ae0466f9d81fd0e2fbe8"
+    },
+    {
+      "path": "Article 2/tables/supervisor_ft_transport.tex",
+      "sha256": "b3cea8202b6618327e0e6f48b5820e29334577c8b127ae0466f9d81fd0e2fbe8"
+    },
+    {
+      "path": "Overleaf/tables/supervisor_paired_ap.tex",
+      "sha256": "65620b20bc0f2ab987e2378ecaa11fff8daab180d3e0d0fa6295959a3ec32780"
+    },
+    {
+      "path": "Article 1/tables/supervisor_paired_ap.tex",
+      "sha256": "65620b20bc0f2ab987e2378ecaa11fff8daab180d3e0d0fa6295959a3ec32780"
+    },
+    {
+      "path": "Article 2/tables/supervisor_paired_ap.tex",
+      "sha256": "65620b20bc0f2ab987e2378ecaa11fff8daab180d3e0d0fa6295959a3ec32780"
+    }
+  ],
+  "canonical_phases": [
+    "basic_verified",
+    "paired_ap",
+    "ft_transport"
+  ],
+  "canonical_report_sources": [
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/basic_verified/diagnostics.json",
+      "sha256": "6c3346b43f8551fb01297b1066d719135f9b367354bfc8d78212834d6310f066"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/paired_ap/diagnostics.json",
+      "sha256": "4c1798495a54a1f83f1bd31fa24156525e47838aa3fb6c217c09ae67627d4682"
+    },
+    {
+      "path": "results_revision/20261015_supervisor/threshold_diagnostics/ft_transport/diagnostics.json",
+      "sha256": "918377c823b9b55cfebeaf26e24fe83b05ab64a209393f6fb323298a9637b0c0"
+    }
+  ],
+  "code": [
+    {
+      "path": "src/supervisor_threshold_diagnostics.py",
+      "sha256": "e8f66394ecf290a792a0cdbe44a48c7d4e1a99010503c9fe80f8c615434539ee"
+    },
+    {
+      "path": "src/revision_thresholds.py",
+      "sha256": "54edfc37ba8ebb4017baaa92f1d6514fecf663bbfdd62d51503d7e815905f551"
+    },
+    {
+      "path": "tests/test_supervisor_threshold_diagnostics.py",
+      "sha256": "a58b4338afcb4fb3ebb46bc396225a1148fdf3eb0a5d3646353148cb38cc2e2f"
+    }
+  ],
+  "excluded_noncanonical_candidate": "basic/diagnostics.json: exploratory pre-QA arithmetic candidate, superseded explicitly by basic_verified; never use for reporting/export",
+  "new_TEST_score_arrays": 1,
+  "new_fits": 0,
+  "numerical_limitations": [
+    {
+      "AP_numerical_difference": 0.0,
+      "ROC_AUC_numerical_difference": 0.0,
+      "distinct_raw_scores_coalesced_float64": 16,
+      "model": "rf",
+      "strategy": "ros"
+    },
+    {
+      "AP_numerical_difference": -1.224081974671165e-09,
+      "ROC_AUC_numerical_difference": 4.92742291080539e-07,
+      "distinct_raw_scores_coalesced_float64": 536,
+      "model": "rf",
+      "strategy": "weights"
+    }
+  ],
+  "paired_bootstrap_requested": 1000,
+  "paired_bootstrap_valid": 1000,
+  "shared_tables_identical_across_documents": true,
+  "status": "complete"
+}

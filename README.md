@@ -2,11 +2,15 @@
 
 *A Systematic Comparison of Classical Machine Learning Models and Tabular Transformers*
 
+Release `20261015_supervisor_r2` adds diagnostics and clarifies the interpretation of the existing experiments. No models were retrained for this revision and the primary fitted scores remain unchanged.
+
+The [reviewed manuscript PDF](https://github.com/Olavo200100274/fraud-imbalance-classical-vs-transformers/blob/main/publications/article_2.pdf) is maintained in the main study repository, not distributed in this checkout. The release inventory records that external reference for the 20-page revision reviewed on 15 October 2026; its SHA-256 is `a2dda3c4c7be17af5d0b331d5066d74598bbcc8008213c673994ee82f694d7f6`.
+
 ## Study and findings
 
 Five supervised families (Logistic Regression, Random Forest, LightGBM, CatBoost and FT-Transformer) and a One-Class SVM reference are evaluated on ULB credit-card transactions and BAF Base bank-account applications. OCSVM fits legitimate examples only, but labelled validation examples select its threshold; it is not an entirely label-free workflow.
 
-The **imbalance factorial** covers seven strategies for the five supervised models on two datasets, plus two separate OCSVM baselines: **72 primary settings**. The **threshold study** applies four predefined rules to the same saved baseline scores: fixed 0.5, validation max-F1, validation max-F2 and the lowest feasible validation threshold with precision at least 0.5. Its **12 baseline studies do not refit models** or select thresholds on TEST. Representation controls remain separate from the primary factorial.
+The **imbalance factorial** covers seven strategies for the five supervised models on two datasets, plus two separate OCSVM baselines: **72 primary settings**. SMOTE+Tomek removes no rows after SMOTE in the audited executions and gives the same effective treatment; aggregate summaries therefore use **six effective conditions**, without deleting either named strategy or any of the 72 recorded settings. The **threshold study** applies four predefined rules to the same saved baseline scores: fixed 0.5, validation max-F1, validation max-F2 and the lowest feasible validation threshold with precision at least 0.5. Its **12 baseline studies do not refit models** or select thresholds on TEST. Representation controls remain separate from the primary factorial.
 
 | BAF FT-Transformer operating rule | F2 | Recall | Alerts among 200,000 applications |
 |---|---:|---:|---:|
@@ -19,13 +23,17 @@ The approximately 6.3-fold F2 increase changes the decision cut, not the ranking
 - No imbalance intervention improves ranking consistently across models and datasets. BAF FT-Transformer AP falls from 0.1769 to 0.1149 under primary SMOTE; the SMOTE-NC control reaches 0.1157, not baseline performance. Different sampling representations prevent an architecture-only explanation.
 - A validation precision target does not guarantee TEST precision or a fixed alert budget. BAF FT-Transformer achieves TEST precision 0.391 under that rule.
 
-PR-AUC denotes **average precision**, not trapezoidal integration. Candidate configurations in the manuscript are conditional summaries of jointly evaluated settings, not prospectively validated deployment prescriptions.
+The full-DEV FT-Transformer **B** remains the primary model. At the fixed DEV-selected cut `0.05843411013484001`, its TEST alert rate is 5.707% (11,414 alerts), whereas the frozen validation pipeline **A** gives 3.855% (7,710 alerts) on those same TEST cases and 3.903% on its validation cases. This supplementary comparison shows that a threshold's operating point depends on the fitted scoring pipeline, not only its hyperparameter configuration. It neither selects A on TEST nor replaces B's reported results.
+
+The paired BAF CatBoost-minus-LightGBM AP difference is +0.0028, with a conditional 95% TEST-row bootstrap interval of [-0.0017, +0.0072]. The interval does not establish equivalence or account for refitting variability. Additional diagnostics report fold-threshold sensitivity, ties and Brier scores; their scope and reproduction limits are described in [results/README.md](results/README.md).
+
+PR-AUC denotes **average precision**, not trapezoidal integration or an arbitrary ordering of tied scores. Top-k metrics use the expected contribution from uniform selection within a tie crossing the k boundary (`expected_uniform_boundary_v1`). Candidate configurations in the manuscript are conditional summaries of jointly evaluated settings, not prospectively validated deployment prescriptions. In particular, the precision-target FT-Transformer candidate does not achieve the requested 0.5 precision on BAF TEST.
 
 ## Experimental protocol
 
 ULB predictor-profile deduplication precedes the seed-42 stratified 80/20 DEV/TEST split, retaining 283,726 profiles and 473 frauds. ULB TEST contains 56,746 profiles and 95 frauds. BAF Base has one million applications; TEST contains 200,000 applications and 2,206 frauds. BAF months are pooled, not evaluated prospectively.
 
-Supervised baseline selection uses 50 attempted Optuna trials: five-fold inner validation for classical models and an internal holdout for FT-Transformer. Corrected ULB searches are repeated after deduplication. Original BAF-selected parameters are retained, classical final models are preserved and FT-Transformer is refitted. Baseline-selected parameters are reused across imbalance interventions. Preprocessing and resampling use the corresponding training partitions only; thresholds are selected within DEV.
+Supervised baseline selection uses 50 attempted Optuna trials: five-fold inner validation for classical models and an internal holdout for FT-Transformer. Corrected ULB searches are repeated after deduplication. Original BAF-selected parameters are retained, classical final models are preserved and FT-Transformer is refitted in the original corrected experiment, not in this supplementary revision. Baseline-selected parameters are reused across imbalance interventions. Preprocessing and resampling use the corresponding training partitions only; thresholds are selected within DEV. Classical final thresholds use the median of fold-selected cuts. Their spread is a sensitivity diagnostic, not a confidence interval, and does not imply a stable deployment cut.
 
 One fixed outer split and conditional TEST-row bootstraps do not measure training-seed or tuning variability. BAF is synthetic, CatBoost receives one-hot classifier inputs, and transformer SMOTE interpolates ordinal category codes. F2 is a recall-weighted criterion, not a monetary utility; alert volume is a workload proxy, not analyst time or prevented loss. Recorded CPU/GPU costs reflect heterogeneous workflows, not intrinsic architectural efficiency.
 
@@ -37,7 +45,6 @@ notebooks/      ULB and BAF Base exploratory analyses
 src/            Shared scientific code and dedicated article evidence checks
 tests/          Synthetic protocol and evidence integrity checks
 results/        Selected metrics, thresholds, controls, frozen scores and paper assets
-publications/   This manuscript PDF
 ```
 
 [results/README.md](results/README.md) describes the numerical evidence and its limits. Shared code is duplicated intentionally so this repository does not depend on another checkout. Some shared modules support the wider thesis workflow; Variant-transfer, SHAP and attention results are outside this paper's exported evidence.

@@ -48,13 +48,20 @@ def json_bytes(document):
     return (json.dumps(document, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
 
 
-def verify(root=ROOT):
+def verify(root=ROOT, *, allow_missing_replaced_pdf=False):
     root = Path(root).resolve()
     document = read_json(root / MANIFEST)
     if document.get("schema") != "dedicated_article_evidence_v1":
         raise ValueError("Unsupported article manifest")
     for relative, record in document["files"].items():
         path = safe_path(root, relative)
+        # Narrow migration gate: Article 2's collaborator removed its PDF in a
+        # later commit without refreshing the old inventory. An explicitly
+        # no-PDF update may repair that one absent pin, never any other input or
+        # a mismatched/modified file. Ordinary public verification remains strict.
+        if (allow_missing_replaced_pdf and document.get("article") == 2
+                and relative == "publications/article_2.pdf" and not path.exists() and not path.is_symlink()):
+            continue
         if not path.is_file() or path.stat().st_size != record["bytes"] or digest(path) != record["sha256"]:
             raise ValueError(f"Release file differs from its pin: {relative}")
     expected_keys = {f"{dataset}/{model}/{strategy}" for dataset in ("ulb_2013", "baf_base")
@@ -79,11 +86,30 @@ def verify(root=ROOT):
     for relative in document["threshold_studies"].values():
         if relative not in document["files"]:
             raise ValueError("Unpinned threshold study")
+    if "release_id" in document:
+        reviewed = document.get("reviewed_pdf", {})
+        relative = f"publications/article_{document['article']}.pdf"
+        record = document["files"].get(relative)
+        if reviewed.get("distributed", True):
+            if (reviewed.get("path") != relative or reviewed.get("review_status") != "passed_in_reviewed_scope"
+                    or record is None or reviewed.get("sha256") != record["sha256"]):
+                raise ValueError("Reviewed PDF identity differs from the dedicated release inventory")
+        elif (document.get("article") != 2 or record is not None or "path" in reviewed
+              or safe_path(root, relative).exists() or safe_path(root, relative).is_symlink()
+              or reviewed.get("review_status") != "passed_in_reviewed_scope"
+              or not re.fullmatch(r"[0-9a-f]{64}", reviewed.get("sha256", ""))
+              or reviewed.get("external_reference") != PARENT + "/blob/main/publications/article_2.pdf"):
+            raise ValueError("External reviewed PDF declaration is inconsistent with the release inventory")
     return document
 
 
 def export(author_root, destination, article):
-    """Copy explicitly pinned evidence and losslessly compress numeric arrays."""
+    """Historical bootstrap exporter; not the reviewed-revision update route.
+
+    Copy explicitly pinned evidence and losslessly compress numeric arrays. This
+    legacy API is retained for auditing the initial public release. New reviewed
+    releases must use :func:`sync_reviewed_release` with the selected PDF/hash.
+    """
     import numpy as np
     from export_public_evidence import portable, source_path
 
@@ -243,6 +269,212 @@ def export(author_root, destination, article):
     return manifest
 
 
+def _reviewed_result_path(relative, article):
+    """Allow only compact public aggregates relevant to the selected article.
+
+    The parent manifest is thesis-specific and must not be copied as an article
+    verifier. Frozen arrays, raw archives and historical overlays are deliberately
+    outside this update route; existing public NPZ archives stay byte-identical.
+    """
+    path = Path(relative)
+    if path.suffix.lower() not in {".json", ".csv", ".tex", ".pdf", ".png"}:
+        return False
+    parts = path.parts
+    if not parts or path.is_absolute() or ".." in parts:
+        return False
+    if parts[0] in {"metrics", "controls"}:
+        return True
+    if parts[0] == "thresholds":
+        return article == 2 or path.name.startswith("supervisor_")
+    if parts[0] in {"transfer", "interpretability"}:
+        return article == 1
+    if parts[:2] == ("tables", "supervisor"):
+        return True
+    if article == 1 and parts[0] == "tables":
+        return path.name in {
+            "transformer_robustness.tex", "rf_overlap.tex", "shap_consistency.tex",
+            "shap_stability.tex", "shap_aggregation_sensitivity.tex",
+            "shap_magnitude_compact.tex", "shap_magnitude_full.tex",
+            "transfer_overlap_full.tex", "transfer_alert_counts.tex", "transfer_alert_rates.tex",
+        }
+    if parts[0] == "provenance":
+        shared = {
+            "selected_runs.json", "historical_baf_selection.json", "dataset_protocol.json",
+            "baf_absence_codes.json", "sampler_identity.json", "lgbm_score_diagnostics.json",
+            "execution_provenance_notes.json", "strategy_summary.json",
+            "supervisor_topk_claims_audit.json", "supervisor_threshold_qa.json",
+        }
+        return (path.name in shared
+                or article == 1 and path.name == "supervisor_interpretability_manifest.json")
+    return False
+
+
+def sync_reviewed_release(author_root, destination, article, *, release_id, pdf,
+                          expected_pdf_sha256, validation=None, publish_pdf=True):
+    """Synchronise an already-exported reviewed revision without changing NPZs.
+
+    This is intentionally separate from the historical full author-side exporter.
+    It accepts the exact reviewed PDF and a complete corrected parent aggregate
+    export, checks every replacement before writing, and preserves replaced
+    release-owned payloads in a clearly historical directory. It never trains,
+    infers, computes SHAP, derives thresholds or rewrites frozen score arrays.
+    """
+    author_root, destination = Path(author_root).resolve(), Path(destination).resolve()
+    if article not in SLUGS or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*", release_id or ""):
+        raise ValueError("An explicit article and safe release identity are required")
+    if type(publish_pdf) is not bool or not publish_pdf and article != 2:
+        raise ValueError("The explicit no-PDF publication policy is supported only for Article 2")
+    if (destination == author_root or not (destination / ".git").is_dir()
+            or any(destination.is_relative_to(author_root / name)
+                   for name in ("results", "results_revision", "Overleaf", "Article 1", "Article 2"))):
+        raise ValueError("Destination must be a separate existing repository checkout")
+    if not re.fullmatch(r"[0-9a-f]{64}", expected_pdf_sha256 or ""):
+        raise ValueError("The independently reviewed PDF SHA-256 is required")
+    pdf = Path(pdf).resolve()
+    if not pdf.is_relative_to(author_root) or not pdf.is_file():
+        raise ValueError("The reviewed PDF must be an explicit author-project file")
+    with pdf.open("rb") as stream:
+        if stream.read(5) != b"%PDF-":
+            raise ValueError("Reviewed manuscript is not a PDF")
+    if digest(pdf) != expected_pdf_sha256:
+        raise ValueError("The manuscript differs from the explicitly reviewed PDF")
+    validation = Path(validation or author_root / "reports/final_pdf_validation_20261015_r2.json").resolve()
+    if not validation.is_relative_to(author_root):
+        raise ValueError("PDF validation record must be inside the author project")
+    review = read_json(validation)
+    reviewed = review.get("pdfs", {}).get(f"article_{article}", {})
+    reviewed_path = safe_path(author_root, reviewed.get("path", "."))
+    if (review.get("status") != "passed_in_reviewed_scope" or reviewed_path != pdf
+            or reviewed.get("sha256") != expected_pdf_sha256):
+        raise ValueError("The PDF is not the manuscript selected by the passed review")
+    parent_file = author_root / "results/provenance/release_manifest.json"
+    parent = read_json(parent_file)
+    if (parent.get("exporter") != "export_public_evidence.py" or parent.get("release_id") != release_id
+            or parent.get("supervisor_revision_id") != "20261015_supervisor"):
+        raise ValueError("Export the explicitly selected corrected parent release before article synchronisation")
+    public_pdf = f"publications/article_{article}.pdf"
+    if not publish_pdf and safe_path(destination, public_pdf).exists():
+        raise FileExistsError("The no-PDF destination still contains a manuscript; remove it only through the separately authorised workflow")
+    previous = verify(destination, allow_missing_replaced_pdf=not publish_pdf)
+    if previous.get("article") != article:
+        raise ValueError("The destination belongs to another article")
+    old_files = previous["files"]
+    pending, source_records = {}, {}
+
+    def propose(relative, data, sources):
+        safe_path(destination, relative)
+        if relative in pending and pending[relative] != data:
+            raise ValueError(f"Conflicting reviewed asset: {relative}")
+        pending[relative] = data
+        source_records[relative] = sources
+
+    for relative, record in sorted(parent["files"].items()):
+        if not _reviewed_result_path(relative, article):
+            continue
+        source = safe_path(author_root / "results", relative)
+        if (not source.is_file() or source.stat().st_size != record["bytes"]
+                or digest(source) != record["public_sha256"]):
+            raise ValueError(f"Corrected parent aggregate differs from its pin: {relative}")
+        data = source.read_bytes()
+        if relative == "provenance/dataset_protocol.json" and article == 2:
+            data = json_bytes({key: value for key, value in json.loads(data).items()
+                               if not key.startswith("baf_var")})
+        if relative == "provenance/supervisor_topk_claims_audit.json" and article == 2:
+            complete = json.loads(data)
+            cells = {key: value for key, value in complete["cells"].items() if not key.startswith("transfer/")}
+            data = json_bytes({
+                "schema_version": complete["schema_version"], "policy": complete["policy"],
+                "historical_policy": complete["historical_policy"], "source_manifest": complete["source_manifest"],
+                "cells": cells, "cell_count": len(cells),
+                "changed_cells": [key for key, value in cells.items() if value["changed"]],
+                "original_inputs_unchanged": complete["original_inputs_unchanged"],
+                "training_inference_or_test_selection": complete["training_inference_or_test_selection"],
+                "scope": "Article 2 primary/control top-k audit; Variant transfer entries are excluded",
+            })
+        propose("results/" + Path(relative).as_posix(), data,
+                [{"parent_public_path": "results/" + relative, "sha256": record["public_sha256"]}])
+    # The article PDF was reviewed against these exact manuscript assets. Copy
+    # their final editorial presentation rather than the thesis table layout.
+    article_root = author_root / f"Article {article}"
+    text = (article_root / "main.tex").read_text(encoding="utf-8-sig")
+    for relative in sorted(set(re.findall(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}", text))):
+        source = safe_path(article_root, relative)
+        if not source.is_file():
+            source = safe_path(article_root / "figs", relative)
+        propose("results/figures/" + Path(relative).name, source.read_bytes(),
+                [{"archive_path": f"Article {article}/" + source.relative_to(article_root).as_posix(), "sha256": digest(source)}])
+    for relative in sorted(set(re.findall(r"\\input\{(tables/[^}]+)\}", text))):
+        source = safe_path(article_root, relative)
+        if not source.suffix:
+            source = source.with_suffix(".tex")
+        propose("results/tables/" + source.name, source.read_bytes(),
+                [{"archive_path": f"Article {article}/" + source.relative_to(article_root).as_posix(), "sha256": digest(source)}])
+    if article == 2:
+        tabulars = [match.group(0) for match in re.finditer(r"\\begin\{(tabularx?)\}.*?\\end\{\1\}", text, re.S)]
+        if len(tabulars) != 14:
+            raise ValueError("Expected fourteen inline Article 2 tables; review the extraction policy")
+        for number, tabular in enumerate(tabulars, 1):
+            propose(f"results/tables/table_{number:02d}.tex", (tabular + "\n").encode("utf-8"),
+                    [{"archive_path": "Article 2/main.tex", "sha256": digest(article_root / "main.tex")}])
+    if publish_pdf:
+        propose(public_pdf, pdf.read_bytes(), [{"reviewed_pdf_sha256": expected_pdf_sha256}])
+    historical_prefix = f"results/provenance/historical_releases/before_{release_id}/"
+    historical = {}
+    for relative, data in pending.items():
+        path = safe_path(destination, relative)
+        if path.exists() and path.read_bytes() != data:
+            old = old_files.get(relative)
+            if old is None or digest(path) != old["sha256"]:
+                raise FileExistsError(f"Unowned or modified destination: {relative}")
+            archive = historical_prefix + relative
+            archive_path = safe_path(destination, archive)
+            old_data = path.read_bytes()
+            if archive_path.exists() and archive_path.read_bytes() != old_data:
+                raise FileExistsError(f"Historical destination already contains another release: {archive}")
+            historical[archive] = old_data
+    manifest_history = historical_prefix + "article_manifest.json"
+    history_path = safe_path(destination, manifest_history)
+    # Keep the original pre-update manifest on an idempotent repeat, never archive
+    # a recursive copy of this release over the first historical manifest.
+    if not history_path.exists():
+        historical[manifest_history] = (destination / MANIFEST).read_bytes()
+    for relative, data in {**historical, **pending}.items():
+        path = safe_path(destination, relative)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if not path.exists() or path.read_bytes() != data:
+            path.write_bytes(data)
+    updated = {**previous, "files": dict(previous["files"])}
+    if not publish_pdf:
+        updated["files"].pop(public_pdf, None)
+    for relative, data in historical.items():
+        updated["files"][relative] = {"sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data),
+                                      "status": "historical; superseded; not current reporting"}
+    for relative, data in pending.items():
+        updated["files"][relative] = {"sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data),
+                                      "sources": source_records[relative]}
+    updated.update({
+        "release_id": release_id,
+        "parent_source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=author_root, text=True).strip(),
+        "parent_public_release_sha256": digest(parent_file),
+        "supervisor_revision_id": parent["supervisor_revision_id"],
+        "manuscript_status": "Unpublished manuscript; reviewed October 2026 supervisor revision and final editorial PDF",
+        "reviewed_pdf": {"sha256": expected_pdf_sha256, "pages": reviewed.get("pages"),
+                         "review_status": review["status"], "distributed": publish_pdf,
+                         **({"path": public_pdf} if publish_pdf else {
+                             "external_reference": PARENT + "/blob/main/publications/article_2.pdf",
+                             "external_reference_scope": "Reference only; not downloaded or network-verified by this article integrity check",
+                         })},
+        "update_scope": "Reviewed aggregate/code/documentation update; no new training, inference, SHAP or score-array replacement",
+        "historical_assets_prefix": historical_prefix,
+    })
+    (destination / MANIFEST).write_bytes(json_bytes(updated))
+    verified = verify(destination)
+    for relative, record in old_files.items():
+        if relative.endswith((".npz", ".npy")) and digest(safe_path(destination, relative)) != record["sha256"]:
+            raise ValueError("A frozen numeric array changed during aggregate-only synchronisation")
+    return verified
+
+
 def refresh_inventory(root):
     """Pin newly exported plot inputs and scientific source copies before release."""
     root = Path(root).resolve()
@@ -361,19 +593,38 @@ def main():
     mode.add_argument("--verify", action="store_true")
     mode.add_argument("--recompute", action="store_true")
     mode.add_argument("--export", action="store_true", help="Author-side operation requiring the full pinned archive")
+    mode.add_argument("--sync-reviewed", action="store_true", help="Update reviewed aggregates/PDF while preserving every public frozen array")
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "runs/recomputed")
     parser.add_argument("--destination", type=Path)
     parser.add_argument("--article", type=int, choices=(1, 2))
+    parser.add_argument("--release-id")
+    parser.add_argument("--pdf", type=Path)
+    parser.add_argument("--expected-pdf-sha256")
+    parser.add_argument("--validation", type=Path)
+    parser.add_argument("--no-pdf", action="store_true", help="Article 2 only: validate the reviewed local PDF but keep it outside this repository")
     args = parser.parse_args()
-    if args.export:
+    if args.sync_reviewed:
+        if any(value is None for value in (args.destination, args.article, args.release_id, args.pdf, args.expected_pdf_sha256)):
+            parser.error("--sync-reviewed requires --destination, --article, --release-id, --pdf and --expected-pdf-sha256")
+        document = sync_reviewed_release(args.root, args.destination, args.article, release_id=args.release_id,
+                                         pdf=args.pdf, expected_pdf_sha256=args.expected_pdf_sha256, validation=args.validation,
+                                         publish_pdf=not args.no_pdf)
+        print(json.dumps({"article": args.article, "release_id": document["release_id"], "files": len(document["files"]), "new_fits": 0}))
+    elif args.export:
+        if args.no_pdf:
+            parser.error("--no-pdf requires --sync-reviewed")
         if args.destination is None or args.article is None:
             parser.error("--export requires --destination and --article")
         document = export(args.root, args.destination, args.article)
         print(json.dumps({"article": args.article, "files": len(document["files"]), "bytes": sum(v["bytes"] for v in document["files"].values())}))
     elif args.recompute:
+        if args.no_pdf:
+            parser.error("--no-pdf requires --sync-reviewed")
         print(json.dumps(recompute(args.root, args.output_dir)))
     else:
+        if args.no_pdf:
+            parser.error("--no-pdf requires --sync-reviewed")
         document = verify(args.root)
         print(json.dumps({"verified": True, "article": document["article"], "files": len(document["files"])}))
 

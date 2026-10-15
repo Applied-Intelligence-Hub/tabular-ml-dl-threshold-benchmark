@@ -12,10 +12,11 @@
   "brier_score": 0.00047493860662214395,
   "k_used": 283,
   "precision": 0.9156626506024096,
-  "precision_at_k": 0.2791519434628975,
+  "precision_at_k": 0.2774681623070173,
   "recall": 0.8,
-  "recall_at_k": 0.8315789473684211,
+  "recall_at_k": 0.8265630519251148,
   "test_fraud_samples": 95,
   "test_samples": 56746,
-  "threshold": 0.16
+  "threshold": 0.16,
+  "top_k_policy": "expected_uniform_boundary_v1"
 }

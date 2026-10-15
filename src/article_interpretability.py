@@ -202,7 +202,12 @@ def _plot_global(summary, destination, plt):
         axis.grid(axis="x", alpha=.2)
         axis.set_axisbelow(True)
         axis.spines[["top", "right"]].set_visible(False)
-    fig.text(.40, .015, "Mean absolute SHAP contribution (log-odds)\nCategorical importance: sum of absolute one-hot contributions", fontsize=8.5)
+    if summary.get("policy") == "mean_i(abs(sum_j_in_G(phi_ij)))":
+        description = "Mean absolute net SHAP contribution (log-odds)\nSigned group sum per case, then absolute value and mean"
+    else:
+        # Replay of an explicitly historical release retains its own policy.
+        description = "Mean absolute SHAP contribution (log-odds)\nCategorical importance: sum of absolute one-hot contributions"
+    fig.text(.40, .015, description, fontsize=8.5)
     fig.subplots_adjust(left=.40, right=.98, bottom=.075, top=.965, hspace=.40)
     fig.savefig(destination, bbox_inches="tight")
     plt.close(fig)

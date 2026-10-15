@@ -17,5 +17,6 @@
   "recall_at_k": 0.10199456029011786,
   "test_fraud_samples": 2206,
   "test_samples": 200000,
-  "threshold": 0.5792941451072693
+  "threshold": 0.5792941451072693,
+  "top_k_policy": "expected_uniform_boundary_v1"
 }

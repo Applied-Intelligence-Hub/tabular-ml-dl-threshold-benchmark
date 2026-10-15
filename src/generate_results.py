@@ -17,6 +17,8 @@ matplotlib.use("Agg")  # no GUI
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
+from evaluation.metrics import (HISTORICAL_TOP_K_POLICY, TOP_K_POLICY,
+                                precision_recall_at_k)
 
 # ── paths ────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent.parent
@@ -140,9 +142,8 @@ def full_precision_metrics(run):
     k = int(metrics["k_used"])
     if not 1 <= k <= len(labels):
         raise ValueError(f"Invalid saved workload size: {run}")
-    top_positives = int(labels[np.argsort(scores)[::-1][:k]].sum())
-    full["precision_at_k"] = top_positives / k
-    full["recall_at_k"] = top_positives / int(labels.sum())
+    full["precision_at_k"], full["recall_at_k"], _ = precision_recall_at_k(labels, scores, k=k)
+    full["top_k_policy"] = TOP_K_POLICY
     if config["model"] == "ocsvm":
         full["brier_score"] = None  # Anomaly scores are not calibrated probabilities.
     else:
@@ -407,7 +408,8 @@ def preflight_revision():
     report = {"revision_id": RUN_MANIFEST.get("revision_id"), "required_runs": len(selected),
               "metric_precision_basis": {"ranking": "Complete saved TEST score arrays",
                                          "operating": "Integer saved confusion counts; exact current thresholds verified",
-                                         "strategy_population_sd": "Full-precision AP and count-derived F2, ddof=0; not random-seed variability"},
+                                         "strategy_population_sd": "Six effective conditions (SMOTE+Tomek excluded), full-precision AP/count-derived F2, ddof=0; seven executed strategies retained; not seed variability",
+                                         "top_k_policy": TOP_K_POLICY},
               "source_runs": {}, "threshold_studies": {}, "transfer_sources": {}}
     execution_note = RUN_MANIFEST.get("execution_provenance_notes")
     if execution_note:
@@ -466,7 +468,10 @@ def preflight_revision():
             computational_cost_basis(config)
         from evaluation.metrics import compute_all_metrics
         exact = float(config.get("threshold_exact", metrics["threshold"]))
-        recomputed = compute_all_metrics(labels, scores, exact)
+        # Verify the original convention explicitly; never rewrite historical
+        # metrics or widen tolerances to hide the approved top-k policy change.
+        saved_top_k_policy = metrics.get("top_k_policy", HISTORICAL_TOP_K_POLICY)
+        recomputed = compute_all_metrics(labels, scores, exact, top_k_policy=saved_top_k_policy)
         for name in ("PR-AUC", "ROC-AUC", "F1", "F2", "TP", "FP", "TN", "FN", "alert_rate", "precision_at_k", "recall_at_k", "k_used"):
             if abs(float(metrics[name]) - float(recomputed[name])) > 1e-6:
                 raise ValueError(f"Saved {key} {name} fails numerical verification")
@@ -480,6 +485,13 @@ def preflight_revision():
                                       "test_row_indices_sha256": (file_digest(run / "test_row_indices.npy")
                                                                   if (run / "test_row_indices.npy").is_file() else None),
                                       "test_samples": len(labels), "test_fraud_samples": int(labels.sum())}
+        expected_p, expected_r, budget = precision_recall_at_k(labels, scores, k=int(metrics["k_used"]))
+        historical_p, historical_r, _ = precision_recall_at_k(
+            labels, scores, k=budget, policy=saved_top_k_policy)
+        report["source_runs"][key]["top_k_evaluation"] = {
+            "current_policy": TOP_K_POLICY, "saved_policy": saved_top_k_policy,
+            "k_used": budget, "precision_at_k": expected_p, "recall_at_k": expected_r,
+            "saved_policy_precision_at_k": historical_p, "saved_policy_recall_at_k": historical_r}
         if strategy == "none":
             report["source_runs"][key]["computational_cost_basis"] = computational_cost_basis(config)
     report["bootstrap_compatibility"] = collect_bootstrap_compatibility(RUN_MANIFEST, report["source_runs"])
@@ -1062,7 +1074,7 @@ BALANCE_LABELS = {
     "rus":        "RUS",
     "ros":        "ROS",
     "smote":      "SMOTE",
-    "smote_tomek": "SM+T",
+    "smote_tomek": "SM+T$^{*}$",
     "smoteenn":   "SMOTEENN",
     "weights":    "Weights",
 }
@@ -1100,7 +1112,7 @@ def generate_factorial_table(fdata, metric_key, dataset_label, filename,
     lines.append(r"\centering")
     lines.append(
         r"\caption{" + caption_metric + r" by model $\times$ strategy on "
-        + dataset_label + r".}"
+        + dataset_label + r". $^{*}$SMOTE+Tomek duplicates SMOTE in the audited runs; all seven strategy results are retained.}"
     )
     lines.append(r"\label{tab:factorial_" + filename + "_" + label_suffix + "}")
     lines.append(r"\begin{tabular}{l" + " c" * len(BALANCE_ORDER) + "}")
@@ -1168,8 +1180,8 @@ def generate_factorial_tables(fdata, dataset_label, filename):
 def generate_transformer_robustness_table(fdata, dataset_label, filename):
     """Compare FT-Transformer and CatBoost across all seven strategies.
 
-    The final row is the population standard deviation (``ddof=0``) across the
-    complete set of designed strategy conditions, computed from complete saved
+    The final row is the population standard deviation (``ddof=0``) across six
+    effective conditions (SMOTE+Tomek excluded), computed from complete saved
     score arrays and integer confusion counts before table-display rounding.
     """
     models = ("fttransformer", "catboost")
@@ -1183,7 +1195,7 @@ def generate_transformer_robustness_table(fdata, dataset_label, filename):
         "rus": "RUS",
         "ros": "ROS",
         "smote": "SMOTE",
-        "smote_tomek": "SM+Tomek",
+        "smote_tomek": r"SM+Tomek$^{*}$",
         "smoteenn": "SMOTEENN",
         "weights": "Weights",
     }
@@ -1192,8 +1204,9 @@ def generate_transformer_robustness_table(fdata, dataset_label, filename):
         r"\centering",
         (r"\caption{FT-Transformer and CatBoost performance across imbalance "
          rf"strategies on {dataset_label}. The final row is the population "
-         r"standard deviation across the seven complete strategy values, "
-         r"computed from complete saved scores and integer confusion counts before table-display rounding; it is not variability across random seeds.}"),
+         r"standard deviation across six effective conditions, excluding SMOTE+Tomek, "
+         r"computed before display rounding; it is not random-seed variability. "
+         r"$^{*}$SMOTE+Tomek duplicates SMOTE in the audited runs; all seven results remain visible.}"),
         rf"\label{{tab:transformer_robustness_{filename}}}",
         r"\begin{tabular}{l cc cc}",
         r"\toprule",
@@ -1212,8 +1225,9 @@ def generate_transformer_robustness_table(fdata, dataset_label, filename):
         )
 
     def population_sd(model, metric):
-        values = [fdata[model][strategy][metric] for strategy in BALANCE_ORDER]
-        return float(np.std(values, ddof=0))
+        from supervisor_interpretability_diagnostics import effective_strategy_summary
+        values = {strategy: fdata[model][strategy][metric] for strategy in BALANCE_ORDER}
+        return effective_strategy_summary(values)["population_sd"]
 
     lines.extend([
         r"\midrule",
@@ -1574,38 +1588,27 @@ VARIANT_LABEL_MAP = {
 
 
 def collect_shap_data():
-    """Collect shap_global.json, shap_consistency.json, shap_variant_stability.json."""
+    """Read the dated net-grouping derivatives; never recompute model SHAP.
+
+    Preflight still verifies the frozen original mass summaries as historical
+    evidence. Main reporting explicitly requires the approved new policy and
+    cannot silently fall back to those older summaries.
+    """
+    from supervisor_interpretability_diagnostics import COHORTS, load_current_shap_summary
+    report = load_current_shap_summary()
     global_data = {}
     for model in SHAP_MODELS:
-        run_dir = find_shap_run(model)
-        if run_dir is None:
-            continue
-        gpath = run_dir / "shap_global.json"
-        if gpath.exists():
-            with open(gpath) as f:
-                global_data[model] = json.load(f)
-
-    # Recompute compatible-model consistency from complete original-feature
-    # matrices, never from truncated dictionaries or an invalid FT panel.
-    from generate_revision_interpretability import jaccard_matrix, load_artefacts
-    artefacts = {model: load_artefacts(model, find_shap_run(model)) for model in SHAP_MODELS}
-    consistency = {"models": SHAP_MODELS, **jaccard_matrix(artefacts)}
-    lgbm_dir = find_shap_run("lgbm")
-
-    # Variant stability
-    stability = None
-    if lgbm_dir:
-        if RUN_MANIFEST is not None:
-            selected = RUN_MANIFEST.get("interpretability", {}).get("variant_stability")
-            if not selected:
-                raise ValueError("Revision generation requires corrected Variant SHAP stability")
-            spath = Path(selected)
-            spath = spath if spath.is_absolute() else ROOT / spath
-        else:
-            spath = lgbm_dir / "shap_variant_stability.json"
-        if spath.exists():
-            with open(spath) as f:
-                stability = json.load(f)
+        record = report["models"][model]
+        if (ROOT / record["source_run"]).resolve() != find_shap_run(model).resolve():
+            raise ValueError("The net SHAP derivative uses a different compatible model pin")
+        global_data[model] = {name: record["complete_global_importance"][name] for name in record["ranking"]}
+    consistency = {"models": SHAP_MODELS, "top_k": 10,
+                   "rankings": {m: report["models"][m]["top10"] for m in SHAP_MODELS},
+                   "jaccard_matrix": report["cross_model_top10_jaccard"], "grouping_policy": report["policy"]}
+    stability = {"variant_keys": list(COHORTS), "jaccard_matrix": report["cohort_top10_jaccard"],
+                 "grouping_policy": report["policy"],
+                 "global_importance": {c: report["cohorts"][c]["complete_global_importance"] for c in COHORTS},
+                 "rankings": {c: report["cohorts"][c]["top10"] for c in COHORTS}}
 
     # Local cases
     local_data = {}
@@ -1622,13 +1625,17 @@ def collect_shap_data():
 
 
 def generate_shap_global_bar(global_data):
-    """Draw each compatible model's actual top-15 from complete saved SHAP values."""
+    """Draw each model's top-15 from the current complete net-group vectors."""
     if not global_data:
         return
-    from generate_revision_interpretability import load_artefacts, plot_global
-    artefacts = {model: load_artefacts(model, find_shap_run(model)) for model in SHAP_MODELS}
+    from supervisor_interpretability_diagnostics import load_current_shap_summary
+    from article_interpretability import _plot_global
+    report = load_current_shap_summary()
+    for model in SHAP_MODELS:
+        if global_data[model] != report["models"][model]["complete_global_importance"]:
+            raise ValueError("SHAP plotting input disagrees with the current grouping policy")
     out = _figures_dir("baf") / "shap_global.pdf"
-    plot_global(artefacts, out)
+    _plot_global(report, out, plt)
     _emit(out)
 
 
@@ -1705,7 +1712,7 @@ def generate_shap_consistency_table(consistency):
     lines = [
         r"\begin{table}[ht!]",
         r"\centering",
-        r"\caption{Jaccard similarity of top-10 SHAP features across model pairs (BAF Base).}",
+        r"\caption{Jaccard membership agreement of top-10 original-feature SHAP sets across model pairs (BAF Base), using mean absolute net group contributions. This does not compare magnitudes or rank order.}",
         r"\label{tab:shap_consistency}",
     ]
 
@@ -1748,7 +1755,7 @@ def generate_shap_stability_table(stability):
     lines = [
         r"\begin{table}[ht!]",
         r"\centering",
-        r"\caption{Jaccard similarity of top-10 SHAP features for LGBM across BAF Variants.}",
+        r"\caption{Jaccard membership agreement of frozen LGBM top-10 original-feature SHAP sets on Base and filtered BAF Variants, using mean absolute net group contributions. Magnitudes and ranks may change.}",
         r"\label{tab:shap_stability}",
     ]
 

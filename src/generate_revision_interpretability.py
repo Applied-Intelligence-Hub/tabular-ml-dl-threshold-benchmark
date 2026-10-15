@@ -1,4 +1,9 @@
-"""Generate audited BAF interpretability figures from explicitly selected runs.
+"""Historical 2026-10-05 absolute-mass interpretation workflow.
+
+For the current main net-group policy, use
+``supervisor_interpretability_diagnostics.py``. This historical workflow is
+retained to reproduce its explicitly labelled original aggregation, not to
+regenerate current manuscript global-importance figures.
 
 This module never trains a model or modifies the selected source runs. Outputs
 must be written outside the preserved results, results_thesis and Overleaf

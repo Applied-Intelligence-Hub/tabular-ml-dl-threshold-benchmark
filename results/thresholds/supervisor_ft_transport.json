@@ -1,0 +1,138 @@
+{
+  "A_validation_reproduction": {
+    "atol": 1e-06,
+    "decisions_changed": 0,
+    "maximum_absolute_score_difference": 0.0,
+    "precedes_A_TEST_inference": true,
+    "rows": 160000,
+    "rtol": 1e-05,
+    "scores_bitwise_equal": true
+  },
+  "TEST_checkpoint_selection": false,
+  "batch_size": 2048,
+  "device": "cuda",
+  "interpretation": "Post-hoc sensitivity of two frozen pipelines; A/VAL versus B/TEST changes fitted pipeline and observations; A/TEST versus B/TEST does not isolate initialization, training-size or preprocessing causes.",
+  "new_TEST_score_arrays": 1,
+  "new_artefact": {
+    "path": "results_revision/20261015_supervisor/threshold_diagnostics/ft_transport/A_test_scores.npy",
+    "sha256": "0875d5b0420f57dd9bd5dea13d8a7e4d380c7b0bf3c06b1ad89288fbbd908a64"
+  },
+  "new_fits": 0,
+  "principal_model": "B full-DEV",
+  "python": "3.12.14",
+  "rows": [
+    {
+      "F2": 0.31040962044344234,
+      "FN": 939,
+      "FP": 5419,
+      "TN": 152816,
+      "TP": 826,
+      "alert_rate": 0.03903125,
+      "alerts": 6245,
+      "average_precision": 0.17069022517889848,
+      "fraud_rows": 1765,
+      "precision": 0.1322658126501201,
+      "precision_target_0_5_met": false,
+      "recall": 0.4679886685552408,
+      "role": "A/VAL",
+      "rows": 160000,
+      "threshold": 0.05843411013484001
+    },
+    {
+      "F2": 0.3166202975686464,
+      "FN": 1159,
+      "FP": 6663,
+      "TN": 191131,
+      "TP": 1047,
+      "alert_rate": 0.03855,
+      "alerts": 7710,
+      "average_precision": 0.1766924994945255,
+      "fraud_rows": 2206,
+      "precision": 0.1357976653696498,
+      "precision_target_0_5_met": false,
+      "recall": 0.47461468721668176,
+      "role": "A/TEST",
+      "rows": 200000,
+      "threshold": 0.05843411013484001
+    },
+    {
+      "F2": 0.3041308429686728,
+      "FN": 975,
+      "FP": 10183,
+      "TN": 187611,
+      "TP": 1231,
+      "alert_rate": 0.05707,
+      "alerts": 11414,
+      "average_precision": 0.176949943939938,
+      "fraud_rows": 2206,
+      "precision": 0.1078500087611705,
+      "precision_target_0_5_met": false,
+      "recall": 0.5580235720761559,
+      "role": "B/TEST",
+      "rows": 200000,
+      "threshold": 0.05843411013484001
+    }
+  ],
+  "source_run": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309",
+  "sources": [
+    {
+      "path": "results/provenance/selected_runs.json",
+      "sha256": "3d465ff0e501d95d1fc1941324aec50e6cb741be45bf18870a021b8f3687034f"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/config.json",
+      "sha256": "897d2e7c0bf4473397ed7c6f711fa54c795f225c57cc9b7c730fea3eafea2663"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/y_test.npy",
+      "sha256": "d4da3d6a6c62ef54d683eb8837c0d88c54a26ff4fe32d7f8b74ae491201e83fd"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/y_test_scores.npy",
+      "sha256": "7a5fe7bb6f739aca278ea73073a0d4862d9a05ac3d64836c85559ecde6e8f423"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/test_row_indices.npy",
+      "sha256": "153a4f3ec537e7084a6b3efbfd3991bfe548c57fcd60d44ebe682e0059243ae7"
+    },
+    {
+      "path": "results/metrics/baf_base/fttransformer/none/metrics_full_precision.json",
+      "sha256": "0deff2f03612045ef5814609bfdea925886cc452b1985990668f32633aa4b9d3"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/validation_model.pt",
+      "sha256": "e36feca29b9936aecd95af35f8ea5638b9e1f21e521dea5ea80dd74f865a8e0a"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/validation_preprocessors.joblib",
+      "sha256": "84b755534773f8d9b208ec18e3ef880c8a3ce389d96e8a369c03dcdd61e54990"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/validation_row_indices.npy",
+      "sha256": "39a7140a3c969416ee0d094d22906dd9df955d293e7f6285e57e5bf8c6f6931b"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/y_val.npy",
+      "sha256": "442f8d914fb8c46289e7cdc7fc30fd01945b3d81071adcd987a5c2b3b930c176"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/y_val_scores.npy",
+      "sha256": "53237ed859bd26c0763b105bdd18c0dba328c2491364cc2cfaa83f92e9f29823"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/model.pt",
+      "sha256": "d08e644a1b3d35b220c48039ec48ed293ea29dd8e8b16cd140342796cfb9b193"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/preprocessors.joblib",
+      "sha256": "df72c4f6dfc021dc14db73510b9b0fd9129a8b56678b1e341676ebd48b473657"
+    },
+    {
+      "path": "results_revision/20261005/baf_base/fttransformer/none/run_20261006_073640_773309/completed.json",
+      "sha256": "2d855a821ca8561002625d568d34de5d3dcfa54514379a7bd8f85d77ff19c2a3"
+    }
+  ],
+  "status": "complete",
+  "supplementary_model": "A validation checkpoint with A fitted preprocessors",
+  "torch": "2.5.1+cu121"
+}

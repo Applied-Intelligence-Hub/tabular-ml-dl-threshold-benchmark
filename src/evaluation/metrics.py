@@ -10,6 +10,10 @@ from sklearn.metrics import (
 )
 
 
+TOP_K_POLICY = "expected_uniform_boundary_v1"
+HISTORICAL_TOP_K_POLICY = "numpy_argsort_positional_v1"
+
+
 # ─────────────────────────────────────────────────────────────────────────
 # Core metric functions
 # ─────────────────────────────────────────────────────────────────────────
@@ -95,7 +99,7 @@ def find_threshold_at_min_precision(y_true, y_scores, min_precision=0.5):
     return float(thresholds[best_idx]), float(p[best_idx])
 
 
-def compute_all_metrics(y_true, y_scores, threshold):
+def compute_all_metrics(y_true, y_scores, threshold, *, top_k_policy=TOP_K_POLICY):
     """
     Compute every evaluation metric required by the thesis protocol.
 
@@ -118,14 +122,15 @@ def compute_all_metrics(y_true, y_scores, threshold):
     alert_rate = int((y_pred == 1).sum()) / n if n > 0 else 0.0
     fp_tp_ratio = fp / tp if tp > 0 else float("inf")
 
-    # ── Brier score (calibration quality) ─────────────────────────────
+    # ── Brier score (squared probabilistic error, not calibration alone) ──
     # Requires probabilities in [0, 1]. If scores are not probabilities
     # (e.g. OCSVM decision_function), we clip for a best-effort Brier.
     y_scores_clipped = np.clip(y_scores, 0.0, 1.0)
     brier = brier_score_loss(y_true, y_scores_clipped)
 
     # ── Workload metrics: Precision@k and Recall@k ────────────────────
-    prec_at_k, recall_at_k, k_used = _precision_recall_at_k(y_true, y_scores)
+    prec_at_k, recall_at_k, k_used = precision_recall_at_k(
+        y_true, y_scores, policy=top_k_policy)
 
     return {
         "PR-AUC": round(float(pr_auc), 6),
@@ -143,6 +148,7 @@ def compute_all_metrics(y_true, y_scores, threshold):
         "precision_at_k": round(float(prec_at_k), 6),
         "recall_at_k": round(float(recall_at_k), 6),
         "k_used": int(k_used),
+        "top_k_policy": top_k_policy,
     }
 
 
@@ -203,23 +209,53 @@ def bootstrap_ci(y_true, y_scores, threshold, metric_fn=None,
 # Workload helpers
 # ─────────────────────────────────────────────────────────────────────────
 
-def _precision_recall_at_k(y_true, y_scores, top_fraction=0.005):
-    """
-    Precision and Recall in the top-k alerts (default: top 0.5 %).
+def precision_recall_at_k(y_true, y_scores, top_fraction=0.005, *, k=None,
+                          policy=TOP_K_POLICY):
+    """Expected P@k/R@k with uniform selection within an exact boundary tie.
 
-    This simulates an investigator reviewing only the k highest-scored
-    transactions and measures how many of those are actually fraud.
+    All scores strictly above the kth score enter the budget. Remaining slots
+    receive the analytical expected positive count of uniform selection from
+    the boundary group. Scores are not rounded, perturbed or compared using an
+    epsilon. This is an offline evaluation convention, not an alert policy.
+
+    The explicitly named historical policy is retained only to verify frozen
+    records. New metrics default to the permutation-invariant expected policy.
     """
     y_true = np.asarray(y_true)
     y_scores = np.asarray(y_scores)
+    if y_true.ndim != 1 or y_scores.ndim != 1 or y_true.shape != y_scores.shape:
+        raise ValueError("Top-k labels and scores must be aligned one-dimensional arrays")
     n = len(y_true)
-    k = max(1, int(n * top_fraction))
+    if not n or not np.isin(y_true, [0, 1]).all():
+        raise ValueError("Top-k labels must be non-empty and binary")
+    try:
+        finite_real_scores = not np.iscomplexobj(y_scores) and np.isfinite(y_scores).all()
+    except TypeError as error:
+        raise ValueError("Top-k scores must be finite real numbers") from error
+    if not finite_real_scores:
+        raise ValueError("Top-k scores must be finite real numbers")
+    if k is None:
+        if not np.isfinite(top_fraction) or not 0 < top_fraction <= 1:
+            raise ValueError("Top-k fraction must be in (0, 1]")
+        k = max(1, int(n * top_fraction))
+    if isinstance(k, (bool, np.bool_)) or not isinstance(k, (int, np.integer)) or not 1 <= k <= n:
+        raise ValueError("Top-k budget must be an integer between one and the population size")
+    k = int(k)
+    if policy == HISTORICAL_TOP_K_POLICY:
+        tp_at_k = float(y_true[np.argsort(y_scores)[::-1][:k]].sum())
+    elif policy == TOP_K_POLICY:
+        boundary = np.partition(y_scores, n - k)[n - k]
+        above = y_scores > boundary
+        tied = y_scores == boundary
+        remaining = k - int(above.sum())
+        tp_at_k = (float(y_true[above].sum())
+                   + remaining * (float(y_true[tied].sum()) / int(tied.sum())))
+    else:
+        raise ValueError(f"Unknown top-k evaluation policy: {policy}")
+    total_positives = int(y_true.sum())
+    return tp_at_k / k, tp_at_k / total_positives if total_positives else 0.0, k
 
-    top_k_idx = np.argsort(y_scores)[::-1][:k]
-    tp_at_k = y_true[top_k_idx].sum()
-    total_positives = y_true.sum()
 
-    precision_at_k = tp_at_k / k if k > 0 else 0.0
-    recall_at_k = tp_at_k / total_positives if total_positives > 0 else 0.0
-
-    return precision_at_k, recall_at_k, k
+def _precision_recall_at_k(y_true, y_scores, top_fraction=0.005):
+    """Compatibility entry point using the current expected top-k policy."""
+    return precision_recall_at_k(y_true, y_scores, top_fraction)
